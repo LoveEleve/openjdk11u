@@ -58,6 +58,7 @@ struct InCSetState {
     // The negative values are used for objects requiring various special cases,
     // for example eager reclamation of humongous objects.
     Humongous    = -1,    // The region is humongous
+    Optional     = -2,    // The region is optional (not mandatory to be collected)
     NotInCSet    =  0,    // The region is not in the collection set.
     Young        =  1,    // The region is in the collection set and a young region.
     Old          =  2,    // The region is in the collection set and an old region.
@@ -76,12 +77,13 @@ struct InCSetState {
   bool is_in_cset() const              { return _value > NotInCSet; }
 
   bool is_humongous() const            { return _value == Humongous; }
+  bool is_optional() const             { return _value == Optional; }
   bool is_young() const                { return _value == Young; }
   bool is_old() const                  { return _value == Old; }
 
 #ifdef ASSERT
   bool is_default() const              { return _value == NotInCSet; }
-  bool is_valid() const                { return (_value >= Humongous) && (_value < Num); }
+  bool is_valid() const                { return (_value >= Optional) && (_value < Num); }
   bool is_valid_gen() const            { return (_value >= Young && _value <= Old); }
 #endif
 };
@@ -121,6 +123,12 @@ class G1InCSetStateFastTestBiasedMappedArray : public G1BiasedMappedArray<InCSet
     assert(get_by_index(index).is_default(),
            "State at index " INTPTR_FORMAT " should be default but is " CSETSTATE_FORMAT, index, get_by_index(index).value());
     set_by_index(index, InCSetState::Old);
+  }
+
+  void set_in_optional(uintptr_t index) {
+    assert(get_by_index(index).is_default(),
+           "State at index " INTPTR_FORMAT " should be default but is " CSETSTATE_FORMAT, index, get_by_index(index).value());
+    set_by_index(index, InCSetState::Optional);
   }
 
   bool is_in_cset_or_humongous(HeapWord* addr) const { return at(addr).is_in_cset_or_humongous(); }
