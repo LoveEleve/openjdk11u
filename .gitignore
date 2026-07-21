@@ -18,3 +18,5 @@ Thumbs.db
 
 # Backup
 jdk.hotspot.agent.bak/
+config.log
+configure.log
