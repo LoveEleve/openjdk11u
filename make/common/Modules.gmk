@@ -47,135 +47,77 @@ $(eval $(call IncludeCustomExtension, common/Modules.gmk))
 
 BOOT_MODULES += \
     java.base \
-    java.datatransfer \
-    java.desktop \
     java.instrument \
     java.logging \
     java.management \
-    java.management.rmi \
     java.naming \
     java.prefs \
-    java.rmi \
     java.security.sasl \
     java.xml \
-    jdk.internal.vm.ci \
     jdk.jfr \
     jdk.management \
     jdk.management.jfr \
     jdk.management.agent \
     jdk.naming.ldap \
     jdk.net \
-    jdk.sctp \
     jdk.unsupported \
-    #
-
-# to be deprivileged
-BOOT_MODULES += \
-    jdk.naming.rmi \
     #
 
 # Modules that directly or indirectly requiring upgradeable modules
 # should carefully be considered if it should be upgradeable or not.
-UPGRADEABLE_MODULES += \
-    java.compiler \
-    jdk.aot \
-    jdk.internal.vm.compiler \
-    jdk.internal.vm.compiler.management \
-    #
+# (no upgradeable modules remain after trimming)
 
-
-AGGREGATOR_MODULES += \
-    java.se \
-    #
 
 PLATFORM_MODULES += \
-    $(UPGRADEABLE_MODULES) \
-    $(AGGREGATOR_MODULES)
+    $(UPGRADEABLE_MODULES)
     #
 
 PLATFORM_MODULES += \
     java.net.http \
-    java.scripting \
     java.security.jgss \
-    java.smartcardio \
     java.sql \
     java.sql.rowset \
     java.transaction.xa \
     java.xml.crypto \
-    jdk.accessibility \
     jdk.charsets \
     jdk.crypto.cryptoki \
     jdk.crypto.ec \
-    jdk.dynalink \
     jdk.httpserver \
-    jdk.jsobject \
+    jdk.jdeps \
     jdk.localedata \
     jdk.naming.dns \
-    jdk.scripting.nashorn \
     jdk.security.auth \
     jdk.security.jgss \
-    jdk.xml.dom \
     jdk.zipfs \
     #
 
-ifeq ($(call isTargetOs, windows), true)
-  PLATFORM_MODULES += jdk.crypto.mscapi
-endif
-
-ifeq ($(call isTargetOs, solaris), true)
-  PLATFORM_MODULES += jdk.crypto.ucrypto
-endif
-
 JRE_TOOL_MODULES += \
-    jdk.jdwp.agent \
-    jdk.pack \
-    jdk.scripting.nashorn.shell \
     #
+
 
 ################################################################################
 
 # DOCS_MODULES defines the root modules for javadoc generation.
 # All of their `require transitive` modules directly and indirectly will be included.
 DOCS_MODULES += \
-    java.se \
-    java.smartcardio \
-    jdk.accessibility \
     jdk.attach \
     jdk.charsets \
     jdk.compiler \
     jdk.crypto.cryptoki \
     jdk.crypto.ec \
-    jdk.dynalink \
-    jdk.editpad \
-    jdk.hotspot.agent \
     jdk.httpserver \
     jdk.jartool \
-    jdk.javadoc \
     jdk.jcmd \
-    jdk.jconsole \
-    jdk.jdeps \
-    jdk.jdi \
-    jdk.jdwp.agent \
     jdk.jfr \
     jdk.jlink \
-    jdk.jsobject \
-    jdk.jshell \
-    jdk.jstatd \
-    jdk.localedata \
     jdk.management \
     jdk.management.agent \
     jdk.management.jfr \
     jdk.naming.dns \
     jdk.naming.ldap \
-    jdk.naming.rmi \
     jdk.net \
-    jdk.pack \
-    jdk.rmic \
-    jdk.scripting.nashorn \
-    jdk.sctp \
     jdk.security.auth \
     jdk.security.jgss \
-    jdk.xml.dom \
     jdk.zipfs \
     #
 
@@ -186,17 +128,9 @@ INTERIM_IMAGE_MODULES := java.base java.logging
 LANGTOOLS_MODULES := \
     java.compiler \
     jdk.compiler \
-    jdk.javadoc \
-    jdk.jdeps \
-    jdk.jshell \
     #
 
 HOTSPOT_MODULES := \
-    jdk.aot \
-    jdk.hotspot.agent \
-    jdk.internal.vm.ci \
-    jdk.internal.vm.compiler \
-    jdk.internal.vm.compiler.management \
     #
 
 ################################################################################
@@ -204,28 +138,6 @@ HOTSPOT_MODULES := \
 
 ifeq ($(INCLUDE_SA), false)
   MODULES_FILTER += jdk.hotspot.agent
-endif
-
-################################################################################
-# Filter out jvmci specific modules if jvmci is disabled
-
-ifeq ($(INCLUDE_JVMCI), false)
-  MODULES_FILTER += jdk.internal.vm.ci
-endif
-
-################################################################################
-# Filter out Graal specific modules if Graal is disabled
-
-ifeq ($(INCLUDE_GRAAL), false)
-  MODULES_FILTER += jdk.internal.vm.compiler
-  MODULES_FILTER += jdk.internal.vm.compiler.management
-endif
-
-################################################################################
-# Filter out aot specific modules if aot is disabled
-
-ifeq ($(ENABLE_AOT), false)
-  MODULES_FILTER += jdk.aot
 endif
 
 ################################################################################

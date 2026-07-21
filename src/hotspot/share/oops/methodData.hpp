@@ -35,7 +35,6 @@
 #include "utilities/align.hpp"
 #include "utilities/copy.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmci_globals.hpp"
 #endif
 
 class BytecodeStream;

@@ -27,7 +27,6 @@
 
 #include "classfile/moduleEntry.hpp"
 #include "jfr/support/jfrIntrinsics.hpp"
-#include "jvmci/vmSymbols_jvmci.hpp"
 #include "memory/iterator.hpp"
 #include "oops/symbol.hpp"
 #include "utilities/macros.hpp"
@@ -326,8 +325,7 @@
   NOT_LP64(  do_alias(intptr_signature,               int_signature)  )                           \
   LP64_ONLY( do_alias(intptr_signature,               long_signature) )                           \
                                                                                                                                       \
-  /* Support for JVMCI */                                                                                                             \
-  JVMCI_VM_SYMBOLS_DO(template, do_alias)                                                         \
+  /* Support for JVMCI (removed) */                                                                                                       \
                                                                                                   \
   template(java_lang_StackWalker,                     "java/lang/StackWalker")                    \
   template(java_lang_StackFrameInfo,                  "java/lang/StackFrameInfo")                 \

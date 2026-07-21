@@ -1,0 +1,5 @@
+file(GLOB SRC "../unix/native/libprefs/*.c")
+add_library(prefs SHARED ${SRC})
+target_include_directories(prefs PRIVATE ../unix/native/libprefs)
+target_link_libraries(prefs PRIVATE java)
+set_target_properties(prefs PROPERTIES OUTPUT_NAME prefs)

@@ -1,0 +1,9 @@
+SUNWprivate_1.1 {
+  global:
+    JNI_*;
+    JVM_*;
+    jio_*;
+    AsyncGetCallTrace;
+  local:
+    *;
+};

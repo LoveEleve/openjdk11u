@@ -92,8 +92,6 @@
 #include "utilities/macros.hpp"
 #include "utilities/vmError.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciCompiler.hpp"
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 
 static jint CurrentVersion = JNI_VERSION_10;

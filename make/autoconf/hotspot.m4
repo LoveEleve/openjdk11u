@@ -425,21 +425,10 @@ AC_DEFUN_ONCE([HOTSPOT_SETUP_JVM_FEATURES],
     JVM_FEATURES_jvmci=""
     INCLUDE_JVMCI="false"
   else
-    # Only enable jvmci on x86_64, sparcv9 and aarch64
-    if test "x$OPENJDK_TARGET_CPU" = "xx86_64" || \
-       test "x$OPENJDK_TARGET_CPU" = "xsparcv9" || \
-       test "x$OPENJDK_TARGET_CPU" = "xaarch64" ; then
-      AC_MSG_RESULT([yes])
-      JVM_FEATURES_jvmci="jvmci"
-      INCLUDE_JVMCI="true"
-    else
-      AC_MSG_RESULT([no])
-      JVM_FEATURES_jvmci=""
-      INCLUDE_JVMCI="false"
-      if HOTSPOT_CHECK_JVM_FEATURE(jvmci); then
-        AC_MSG_ERROR([JVMCI is currently not supported on this platform.])
-      fi
-    fi
+    # jvmci/graal removed
+    JVM_FEATURES_jvmci=""
+    INCLUDE_JVMCI="false"
+    AC_MSG_RESULT([no, jvmci/graal removed])
   fi
 
   AC_SUBST(INCLUDE_JVMCI)
@@ -524,7 +513,8 @@ AC_DEFUN_ONCE([HOTSPOT_SETUP_JVM_FEATURES],
   fi
 
   # All variants but minimal (and custom) get these features
-  NON_MINIMAL_FEATURES="$NON_MINIMAL_FEATURES cmsgc g1gc parallelgc serialgc epsilongc shenandoahgc jni-check jvmti management nmt services vm-structs zgc"
+  # Removed: cmsgc, parallelgc, serialgc, epsilongc, shenandoahgc, zgc
+  NON_MINIMAL_FEATURES="$NON_MINIMAL_FEATURES g1gc jni-check jvmti management nmt services vm-structs"
 
   AC_MSG_CHECKING([if cds should be enabled])
   if test "x$ENABLE_CDS" = "xtrue"; then
@@ -543,7 +533,7 @@ AC_DEFUN_ONCE([HOTSPOT_SETUP_JVM_FEATURES],
   fi
 
   # Enable features depending on variant.
-  JVM_FEATURES_server="compiler1 compiler2 $NON_MINIMAL_FEATURES $JVM_FEATURES $JVM_FEATURES_jvmci $JVM_FEATURES_aot $JVM_FEATURES_graal"
+  JVM_FEATURES_server="compiler1 compiler2 $NON_MINIMAL_FEATURES $JVM_FEATURES"
   JVM_FEATURES_client="compiler1 $NON_MINIMAL_FEATURES $JVM_FEATURES"
   JVM_FEATURES_core="$NON_MINIMAL_FEATURES $JVM_FEATURES"
   JVM_FEATURES_minimal="compiler1 minimal serialgc $JVM_FEATURES $JVM_FEATURES_link_time_opt"

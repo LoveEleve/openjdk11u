@@ -45,7 +45,6 @@
 #include "utilities/globalDefinitions.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_SERIALGC
-#include "gc/serial/defNewGeneration.hpp"
 #endif
 
 HeapWord* DirtyCardToOopClosure::get_actual_top(HeapWord* top,

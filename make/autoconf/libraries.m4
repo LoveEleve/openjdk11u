@@ -40,44 +40,26 @@ m4_include([lib-tests.m4])
 AC_DEFUN_ONCE([LIB_DETERMINE_DEPENDENCIES],
 [
   # Check if X11 is needed
-  if test "x$OPENJDK_TARGET_OS" = xwindows || test "x$OPENJDK_TARGET_OS" = xmacosx; then
-    # No X11 support on windows or macosx
-    NEEDS_LIB_X11=false
-  else
-    # All other instances need X11, even if building headless only, libawt still
-    # needs X11 headers.
-    NEEDS_LIB_X11=true
-  fi
+  # java.desktop has been removed; X11 is never needed
+  NEEDS_LIB_X11=false
 
   # Check if fontconfig is needed
-  if test "x$OPENJDK_TARGET_OS" = xwindows || test "x$OPENJDK_TARGET_OS" = xmacosx; then
-    # No fontconfig support on windows or macosx
-    NEEDS_LIB_FONTCONFIG=false
-  else
-    # All other instances need fontconfig, even if building headless only,
-    # libawt still needs fontconfig headers.
-    NEEDS_LIB_FONTCONFIG=true
-  fi
+  # java.desktop has been removed; fontconfig is never needed
+  NEEDS_LIB_FONTCONFIG=false
 
   # Check if cups is needed
-  if test "x$OPENJDK_TARGET_OS" = xwindows; then
-    # Windows have a separate print system
-    NEEDS_LIB_CUPS=false
-  else
-    NEEDS_LIB_CUPS=true
-  fi
+  # java.desktop has been removed; CUPS is never needed
+  NEEDS_LIB_CUPS=false
 
   # A custom hook may have set this already
   if test "x$NEEDS_LIB_FREETYPE" = "x"; then
-    NEEDS_LIB_FREETYPE=true
+    # java.desktop has been removed; freetype is never needed
+    NEEDS_LIB_FREETYPE=false
   fi
 
   # Check if alsa is needed
-  if test "x$OPENJDK_TARGET_OS" = xlinux; then
-    NEEDS_LIB_ALSA=true
-  else
-    NEEDS_LIB_ALSA=false
-  fi
+  # java.desktop has been removed; ALSA is never needed
+  NEEDS_LIB_ALSA=false
 
   # Check if ffi is needed
   if HOTSPOT_CHECK_JVM_VARIANT(zero); then
@@ -93,11 +75,7 @@ AC_DEFUN_ONCE([LIB_DETERMINE_DEPENDENCIES],
 AC_DEFUN_ONCE([LIB_SETUP_LIBRARIES],
 [
   LIB_SETUP_STD_LIBS
-  LIB_SETUP_X11
-  LIB_SETUP_CUPS
-  LIB_SETUP_FONTCONFIG
-  LIB_SETUP_FREETYPE
-  LIB_SETUP_ALSA
+  # Desktop-related libraries removed (X11, CUPS, FONTCONFIG, FREETYPE, ALSA)
   LIB_SETUP_LIBFFI
   LIB_SETUP_BUNDLED_LIBS
   LIB_SETUP_MISC_LIBS

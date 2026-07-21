@@ -28,7 +28,6 @@
 #include "runtime/globals.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmci_globals.hpp"
 #endif
 #ifdef COMPILER1
 #include "c1/c1_globals.hpp"

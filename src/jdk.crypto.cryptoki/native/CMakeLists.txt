@@ -1,0 +1,5 @@
+file(GLOB SRC "../share/native/libj2pkcs11/*.c" "../unix/native/libj2pkcs11/*.c")
+add_library(j2pkcs11 SHARED ${SRC})
+target_include_directories(j2pkcs11 PRIVATE ../share/native/libj2pkcs11 ../unix/native/libj2pkcs11)
+target_link_libraries(j2pkcs11 PRIVATE dl)
+set_target_properties(j2pkcs11 PROPERTIES OUTPUT_NAME j2pkcs11)

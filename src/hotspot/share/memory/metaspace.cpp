@@ -24,7 +24,6 @@
 
 #include "precompiled.hpp"
 
-#include "aot/aotLoader.hpp"
 #include "gc/shared/collectedHeap.hpp"
 #include "logging/log.hpp"
 #include "logging/logStream.hpp"
@@ -1053,7 +1052,9 @@ void Metaspace::set_narrow_klass_base_and_shift(address metaspace_base, address 
   } else {
     Universe::set_narrow_klass_shift(LogKlassAlignmentInBytes);
   }
+  #if INCLUDE_AOT
   AOTLoader::set_narrow_klass_shift();
+  #endif // INCLUDE_AOT
 }
 
 #if INCLUDE_CDS

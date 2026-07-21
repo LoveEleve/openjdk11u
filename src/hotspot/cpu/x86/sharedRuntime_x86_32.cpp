@@ -48,8 +48,6 @@
 #include "opto/runtime.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoahBarrierSet.hpp"
-#include "gc/shenandoah/shenandoahBarrierSetAssembler.hpp"
 #endif
 
 #define __ masm->

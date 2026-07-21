@@ -65,7 +65,6 @@
 #include "utilities/align.hpp"
 #include "utilities/preserveException.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciJavaClasses.hpp"
 #endif
 
 #define INJECTED_FIELD_COMPUTE_OFFSET(klass, name, signature, may_be_java)    \

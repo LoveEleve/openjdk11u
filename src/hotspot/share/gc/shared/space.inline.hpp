@@ -36,7 +36,6 @@
 #include "runtime/prefetch.inline.hpp"
 #include "runtime/safepoint.hpp"
 #if INCLUDE_SERIALGC
-#include "gc/serial/markSweep.inline.hpp"
 #endif
 
 inline HeapWord* Space::block_start(const void* p) {

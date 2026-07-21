@@ -26,32 +26,8 @@
 #define SHARE_GC_SHARED_GC_GLOBALS_HPP
 
 #include "utilities/macros.hpp"
-#if INCLUDE_CMSGC
-#include "gc/cms/cms_globals.hpp"
-#endif
-#if INCLUDE_EPSILONGC
-#include "gc/epsilon/epsilon_globals.hpp"
-#endif
 #if INCLUDE_G1GC
 #include "gc/g1/g1_globals.hpp"
-#endif
-#if INCLUDE_PARALLELGC
-#include "gc/parallel/parallel_globals.hpp"
-#endif
-#if INCLUDE_SERIALGC
-#include "gc/serial/serial_globals.hpp"
-#endif
-#if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoah_globals.hpp"
-#endif
-#if INCLUDE_ZGC
-#include "gc/z/z_globals.hpp"
-#endif
-
-#if INCLUDE_SHENANDOAHGC
-#define shproduct(product, type, name, value, doc) product(type, name, value, doc)
-#else
-#define shproduct(product, type, name, value, doc)
 #endif
 
 #define GC_FLAGS(develop,                                                   \
@@ -69,103 +45,7 @@
                  constraint,                                                \
                  writeable)                                                 \
                                                                             \
-  CMSGC_ONLY(GC_CMS_FLAGS(                                                  \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
-  EPSILONGC_ONLY(GC_EPSILON_FLAGS(                                          \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
   G1GC_ONLY(GC_G1_FLAGS(                                                    \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
-  PARALLELGC_ONLY(GC_PARALLEL_FLAGS(                                        \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
-  SERIALGC_ONLY(GC_SERIAL_FLAGS(                                            \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
-  SHENANDOAHGC_ONLY(GC_SHENANDOAH_FLAGS(                                    \
-    develop,                                                                \
-    develop_pd,                                                             \
-    product,                                                                \
-    product_pd,                                                             \
-    diagnostic,                                                             \
-    diagnostic_pd,                                                          \
-    experimental,                                                           \
-    notproduct,                                                             \
-    manageable,                                                             \
-    product_rw,                                                             \
-    lp64_product,                                                           \
-    range,                                                                  \
-    constraint,                                                             \
-    writeable))                                                             \
-                                                                            \
-  ZGC_ONLY(GC_Z_FLAGS(                                                      \
     develop,                                                                \
     develop_pd,                                                             \
     product,                                                                \
@@ -204,8 +84,7 @@
   experimental(bool, UseZGC, false,                                         \
           "Use the Z garbage collector")                                    \
                                                                             \
-  shproduct(product, bool, UseShenandoahGC, false,                          \
-          "Use the Shenandoah garbage collector")                           \
+  /* UseShenandoahGC removed */                                             \
                                                                             \
   product(uint, ParallelGCThreads, 0,                                       \
           "Number of parallel threads parallel gc will use")                \

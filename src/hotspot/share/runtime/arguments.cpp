@@ -59,7 +59,6 @@
 #include "utilities/macros.hpp"
 #include "utilities/stringUtils.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 #if INCLUDE_JFR
 #include "jfr/jfr.hpp"

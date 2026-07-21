@@ -25,7 +25,6 @@
 #ifndef SHARE_VM_GC_SHARED_SPACEDECORATOR_HPP
 #define SHARE_VM_GC_SHARED_SPACEDECORATOR_HPP
 
-#include "gc/parallel/mutableSpace.hpp"
 #include "gc/shared/space.hpp"
 #include "utilities/globalDefinitions.hpp"
 
@@ -134,7 +133,8 @@ class GenSpaceMangler: public SpaceMangler {
   GenSpaceMangler(ContiguousSpace* sp) : SpaceMangler(), _sp(sp) {}
 };
 
-// For use with ParallelScavengeHeap's.
+// For use with ParallelScavengeHeap's (removed).
+#if INCLUDE_PARALLELGC
 class MutableSpaceMangler: public SpaceMangler {
   MutableSpace* _sp;
 
@@ -146,5 +146,6 @@ class MutableSpaceMangler: public SpaceMangler {
  public:
   MutableSpaceMangler(MutableSpace* sp) : SpaceMangler(), _sp(sp) {}
 };
+#endif // INCLUDE_PARALLELGC
 
 #endif // SHARE_VM_GC_SHARED_SPACEDECORATOR_HPP

@@ -23,7 +23,6 @@
  */
 #include "precompiled.hpp"
 #include "jvm.h"
-#include "aot/aotLoader.hpp"
 #include "classfile/classFileParser.hpp"
 #include "classfile/classFileStream.hpp"
 #include "classfile/classLoader.hpp"
@@ -5577,8 +5576,11 @@ InstanceKlass* ClassFileParser::create_instance_klass(bool changed_by_loadhook, 
   assert(_klass == ik, "invariant");
 
   ik->set_has_passed_fingerprint_check(false);
+#if INCLUDE_AOT
   if (UseAOT && ik->supers_have_passed_fingerprint_checks()) {
+    #if INCLUDE_AOT
     uint64_t aot_fp = AOTLoader::get_saved_fingerprint(ik);
+    #endif // INCLUDE_AOT
     if (aot_fp != 0 && aot_fp == _stream->compute_fingerprint()) {
       // This class matches with a class saved in an AOT library
       ik->set_has_passed_fingerprint_check(true);
@@ -5588,6 +5590,7 @@ InstanceKlass* ClassFileParser::create_instance_klass(bool changed_by_loadhook, 
                                  ik->external_name(), aot_fp, _stream->compute_fingerprint());
     }
   }
+#endif
 
   return ik;
 }

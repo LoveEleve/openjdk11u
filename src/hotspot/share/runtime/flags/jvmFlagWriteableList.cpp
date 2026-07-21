@@ -32,7 +32,6 @@
 #include "opto/c2_globals.hpp"
 #endif // COMPILER2
 #if INCLUDE_JVMCI
-#include "jvmci/jvmci_globals.hpp"
 #endif
 
 bool JVMFlagWriteable::is_writeable(void) {

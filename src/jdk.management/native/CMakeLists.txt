@@ -1,0 +1,5 @@
+file(GLOB SRC "../share/native/libmanagement_ext/*.c" "../unix/native/libmanagement_ext/*.c" "../linux/native/libmanagement_ext/*.c")
+add_library(management_ext SHARED ${SRC})
+target_include_directories(management_ext PRIVATE ../share/native/libmanagement_ext ../unix/native/libmanagement_ext ../linux/native/libmanagement_ext)
+target_link_libraries(management_ext PRIVATE java)
+set_target_properties(management_ext PROPERTIES OUTPUT_NAME management_ext)

@@ -484,8 +484,8 @@ AC_DEFUN_ONCE([BOOTJDK_SETUP_BOOT_JDK_ARGUMENTS],
 
   AC_MSG_CHECKING([flags for boot jdk java command for small workloads])
 
-  # Use serial gc for small short lived tools if possible
-  UTIL_ADD_JVM_ARG_IF_OK([-XX:+UseSerialGC],boot_jdk_jvmargs_small,[$JAVA])
+  # Use G1GC for small short lived tools (SerialGC removed)
+  UTIL_ADD_JVM_ARG_IF_OK([-XX:+UseG1GC],boot_jdk_jvmargs_small,[$JAVA])
   UTIL_ADD_JVM_ARG_IF_OK([-Xms32M],boot_jdk_jvmargs_small,[$JAVA])
   UTIL_ADD_JVM_ARG_IF_OK([-Xmx512M],boot_jdk_jvmargs_small,[$JAVA])
   UTIL_ADD_JVM_ARG_IF_OK([-XX:TieredStopAtLevel=1],boot_jdk_jvmargs_small,[$JAVA])

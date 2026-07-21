@@ -1,18 +1,20 @@
-/build/
-/dist/
-/.idea/
-/.vscode/
-nbproject/private/
-/webrev
-/.src-rev
-/.jib/
+# Build artifacts
+build/
+cmake-build/
+cmake-build-debug/
+cmake-build-release/
+support/
+
+# IDE
+.idea/
+*.iml
+
+# OS
 .DS_Store
-.metadata/
-.recommenders/
-test/nashorn/script/external
-test/nashorn/lib
-NashornProfile.txt
-**/JTreport/**
-**/JTwork/**
-/compile_commands.json
-/.cache
+Thumbs.db
+
+# GDB
+.gdbinit
+
+# Backup
+jdk.hotspot.agent.bak/

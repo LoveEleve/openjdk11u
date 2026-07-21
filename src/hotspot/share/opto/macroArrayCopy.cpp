@@ -33,8 +33,6 @@
 #include "utilities/align.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/c2/shenandoahBarrierSetC2.hpp"
-#include "gc/shenandoah/shenandoahRuntime.hpp"
 #endif
 
 

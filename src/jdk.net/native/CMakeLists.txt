@@ -1,0 +1,5 @@
+file(GLOB SRC "../linux/native/libextnet/*.c")
+add_library(extnet SHARED ${SRC})
+target_include_directories(extnet PRIVATE ../linux/native/libextnet)
+target_link_libraries(extnet PRIVATE java)
+set_target_properties(extnet PROPERTIES OUTPUT_NAME extnet)

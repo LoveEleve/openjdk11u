@@ -45,7 +45,6 @@
 #include "runtime/sharedRuntime.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/c2/shenandoahBarrierSetC2.hpp"
 #endif
 
 //----------------------------GraphKit-----------------------------------------

@@ -1,0 +1,5 @@
+file(GLOB SRC "../unix/native/libmanagement_agent/*.c")
+add_library(management_agent SHARED ${SRC})
+target_include_directories(management_agent PRIVATE ../unix/native/libmanagement_agent)
+target_link_libraries(management_agent PRIVATE java)
+set_target_properties(management_agent PROPERTIES OUTPUT_NAME management_agent)

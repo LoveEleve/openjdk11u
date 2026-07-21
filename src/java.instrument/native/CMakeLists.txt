@@ -1,0 +1,5 @@
+file(GLOB SRC "../share/native/libinstrument/*.c" "../unix/native/libinstrument/*.c")
+add_library(instrument SHARED ${SRC})
+target_include_directories(instrument PRIVATE ../share/native/libinstrument ../unix/native/libinstrument)
+target_link_libraries(instrument PRIVATE java jli)
+set_target_properties(instrument PROPERTIES OUTPUT_NAME instrument)

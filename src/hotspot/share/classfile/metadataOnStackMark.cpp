@@ -33,7 +33,6 @@
 #include "services/threadService.hpp"
 #include "utilities/chunkedList.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 
 MetadataOnStackBuffer* MetadataOnStackMark::_used_buffers = NULL;

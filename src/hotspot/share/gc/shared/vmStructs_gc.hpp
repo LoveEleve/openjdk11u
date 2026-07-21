@@ -35,26 +35,19 @@
 #include "gc/shared/oopStorage.hpp"
 #include "gc/shared/space.hpp"
 #if INCLUDE_CMSGC
-#include "gc/cms/vmStructs_cms.hpp"
 #endif
 #if INCLUDE_EPSILONGC
-#include "gc/epsilon/vmStructs_epsilon.hpp"
 #endif
 #if INCLUDE_G1GC
 #include "gc/g1/vmStructs_g1.hpp"
 #endif
 #if INCLUDE_PARALLELGC
-#include "gc/parallel/vmStructs_parallelgc.hpp"
 #endif
 #if INCLUDE_SERIALGC
-#include "gc/serial/defNewGeneration.hpp"
-#include "gc/serial/vmStructs_serial.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/vmStructs_shenandoah.hpp"
 #endif
 #if INCLUDE_ZGC
-#include "gc/z/vmStructs_z.hpp"
 #endif
 
 #define VM_STRUCTS_GC(nonstatic_field,                                                                                               \

@@ -42,7 +42,6 @@
 #include "runtime/sharedRuntime.hpp"
 #include "utilities/align.hpp"
 #if INCLUDE_ZGC
-#include "gc/z/zBarrierSetRuntime.hpp"
 #endif // INCLUDE_ZGC
 
 OptoReg::Name OptoReg::c_frame_pointer;

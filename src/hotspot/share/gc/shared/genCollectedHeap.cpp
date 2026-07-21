@@ -23,14 +23,12 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "classfile/symbolTable.hpp"
 #include "classfile/stringTable.hpp"
 #include "classfile/systemDictionary.hpp"
 #include "classfile/vmSymbols.hpp"
 #include "code/codeCache.hpp"
 #include "code/icBuffer.hpp"
-#include "gc/serial/defNewGeneration.hpp"
 #include "gc/shared/adaptiveSizePolicy.hpp"
 #include "gc/shared/cardTableBarrierSet.hpp"
 #include "gc/shared/cardTableRS.hpp"
@@ -179,6 +177,7 @@ void GenCollectedHeap::post_initialize() {
   CollectedHeap::post_initialize();
   ref_processing_init();
 
+#if INCLUDE_SERIALGC
   DefNewGeneration* def_new_gen = (DefNewGeneration*)_young_gen;
 
   initialize_size_policy(def_new_gen->eden()->capacity(),
@@ -186,6 +185,7 @@ void GenCollectedHeap::post_initialize() {
                          def_new_gen->from()->capacity());
 
   MarkSweep::initialize();
+#endif
 }
 
 void GenCollectedHeap::ref_processing_init() {
@@ -820,7 +820,9 @@ void GenCollectedHeap::process_roots(StrongRootsScope* scope,
     JvmtiExport::oops_do(strong_roots);
   }
   if (UseAOT && !_process_strong_tasks->is_task_claimed(GCH_PS_aot_oops_do)) {
+    #if INCLUDE_AOT
     AOTLoader::oops_do(strong_roots);
+    #endif // INCLUDE_AOT
   }
 
   if (!_process_strong_tasks->is_task_claimed(GCH_PS_SystemDictionary_oops_do)) {

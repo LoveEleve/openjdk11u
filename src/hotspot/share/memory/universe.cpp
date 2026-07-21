@@ -23,7 +23,6 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "classfile/classLoader.hpp"
 #include "classfile/classLoaderData.hpp"
 #include "classfile/javaClasses.hpp"
@@ -698,7 +697,9 @@ jint universe_init() {
   MetaspaceCounters::initialize_performance_counters();
   CompressedClassSpaceCounters::initialize_performance_counters();
 
+  #if INCLUDE_AOT
   AOTLoader::universe_init();
+  #endif // INCLUDE_AOT
 
   // Checks 'AfterMemoryInit' constraints.
   if (!JVMFlagConstraintList::check_constraints(JVMFlagConstraint::AfterMemoryInit)) {
@@ -787,7 +788,9 @@ jint Universe::initialize_heap() {
       // Did reserve heap below 32Gb. Can use base == 0;
       Universe::set_narrow_oop_base(0);
     }
+    #if INCLUDE_AOT
     AOTLoader::set_narrow_oop_shift();
+    #endif // INCLUDE_AOT
 
     Universe::set_narrow_ptrs_base(Universe::narrow_oop_base());
 

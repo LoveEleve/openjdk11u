@@ -24,7 +24,6 @@
 
 #include "precompiled.hpp"
 #include "jvm.h"
-#include "aot/aotLoader.hpp"
 #include "classfile/classLoader.hpp"
 #include "classfile/stringTable.hpp"
 #include "classfile/systemDictionary.hpp"
@@ -35,8 +34,6 @@
 #include "jfr/jfrEvents.hpp"
 #include "jfr/support/jfrThreadId.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciCompiler.hpp"
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 #include "logging/log.hpp"
 #include "logging/logStream.hpp"
@@ -296,7 +293,9 @@ void print_statistics() {
 #endif // COMPILER2
 
   if (PrintAOTStatistics) {
+    #if INCLUDE_AOT
     AOTLoader::print_statistics();
+    #endif // INCLUDE_AOT
   }
 
   if (PrintNMethodStatistics) {

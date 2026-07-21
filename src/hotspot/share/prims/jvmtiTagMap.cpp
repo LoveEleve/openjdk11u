@@ -60,7 +60,6 @@
 #include "runtime/vmOperations.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_ZGC
-#include "gc/z/zGlobals.hpp"
 #endif
 
 // JvmtiTagHashmapEntry

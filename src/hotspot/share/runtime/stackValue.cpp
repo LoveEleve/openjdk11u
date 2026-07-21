@@ -30,10 +30,8 @@
 #include "runtime/handles.inline.hpp"
 #include "runtime/stackValue.hpp"
 #if INCLUDE_ZGC
-#include "gc/z/zBarrier.inline.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoahBarrierSet.hpp"
 #endif
 
 StackValue* StackValue::create_stack_value(const frame* fr, const RegisterMap* reg_map, ScopeValue* sv) {

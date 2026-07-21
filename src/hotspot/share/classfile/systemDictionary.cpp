@@ -24,7 +24,6 @@
 
 #include "precompiled.hpp"
 #include "jvm.h"
-#include "aot/aotLoader.hpp"
 #include "classfile/classFileParser.hpp"
 #include "classfile/classFileStream.hpp"
 #include "classfile/classLoader.hpp"
@@ -87,7 +86,6 @@
 #include "classfile/systemDictionaryShared.hpp"
 #endif
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 
 PlaceholderTable*      SystemDictionary::_placeholders        = NULL;
@@ -1373,6 +1371,7 @@ InstanceKlass* SystemDictionary::load_shared_class(InstanceKlass* ik,
 
     ik->set_has_passed_fingerprint_check(false);
     if (UseAOT && ik->supers_have_passed_fingerprint_checks()) {
+#if INCLUDE_AOT
       uint64_t aot_fp = AOTLoader::get_saved_fingerprint(ik);
       uint64_t cds_fp = ik->get_stored_fingerprint();
       if (aot_fp != 0 && aot_fp == cds_fp) {
@@ -1382,6 +1381,7 @@ InstanceKlass* SystemDictionary::load_shared_class(InstanceKlass* ik,
         ResourceMark rm;
         log_info(class, fingerprint)("%s :  expected = " PTR64_FORMAT " actual = " PTR64_FORMAT, ik->external_name(), aot_fp, cds_fp);
       }
+#endif
     }
   }
   return ik;

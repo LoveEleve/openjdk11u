@@ -1,0 +1,5 @@
+file(GLOB SRC "../linux/native/libsaproc/*.c" "../share/native/libsaproc/*.c")
+add_library(saproc SHARED ${SRC})
+target_include_directories(saproc PRIVATE ../linux/native/libsaproc ../share/native/libsaproc)
+target_link_libraries(saproc PRIVATE dl)
+set_target_properties(saproc PROPERTIES OUTPUT_NAME saproc)

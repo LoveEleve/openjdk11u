@@ -23,7 +23,6 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "classfile/classFileStream.hpp"
 #include "classfile/metadataOnStackMark.hpp"
 #include "classfile/systemDictionary.hpp"
@@ -4151,7 +4150,9 @@ void VM_RedefineClasses::redefine_single_class(jclass the_jclass,
   if (!the_class->should_be_initialized()) {
     // Class was already initialized, so AOT has only seen the original version.
     // We need to let AOT look at it again.
+    #if INCLUDE_AOT
     AOTLoader::load_for_klass(the_class, THREAD);
+    #endif // INCLUDE_AOT
   }
 
   // keep track of previous versions of this class

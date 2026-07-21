@@ -23,7 +23,6 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "classfile/classLoaderData.hpp"
 #include "classfile/stringTable.hpp"
 #include "classfile/systemDictionary.hpp"
@@ -93,7 +92,9 @@ void RootSetClosure<Delegate>::process() {
   SystemDictionary::oops_do(this);
   Management::oops_do(this);
   StringTable::oops_do(this);
+  #if INCLUDE_AOT
   AOTLoader::oops_do(this);
+  #endif // INCLUDE_AOT
 }
 
 template class RootSetClosure<BFSClosure>;

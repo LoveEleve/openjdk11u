@@ -23,9 +23,10 @@
 
 #include "precompiled.hpp"
 
-#include "aot/compiledIC_aot.hpp"
 #include "code/codeCache.hpp"
 #include "memory/resourceArea.hpp"
+
+#if INCLUDE_AOT
 
 void CompiledDirectStaticCall::set_to_far(const methodHandle& callee, address entry) {
   address stub = find_stub(true /* is_far */);
@@ -120,3 +121,5 @@ void CompiledPltStaticCall::verify() {
   assert(is_clean() || is_call_to_compiled() || is_call_to_interpreted(), "sanity check");
 }
 #endif // !PRODUCT
+
+#endif // INCLUDE_AOT

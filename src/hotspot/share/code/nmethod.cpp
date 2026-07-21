@@ -65,7 +65,6 @@
 #include "utilities/resourceHash.hpp"
 #include "utilities/xmlstream.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciJavaClasses.hpp"
 #endif
 
 #ifdef DTRACE_ENABLED

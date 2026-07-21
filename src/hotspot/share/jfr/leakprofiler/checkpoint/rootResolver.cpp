@@ -23,7 +23,6 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "classfile/stringTable.hpp"
 #include "gc/shared/strongRootsScope.hpp"
 #include "jfr/leakprofiler/utilities/unifiedOop.hpp"
@@ -183,7 +182,9 @@ bool ReferenceToRootClosure::do_string_table_roots() {
 bool ReferenceToRootClosure::do_aot_loader_roots() {
   assert(!complete(), "invariant");
   ReferenceLocateClosure rcl(_callback, OldObjectRoot::_aot, OldObjectRoot::_type_undetermined, NULL);
+  #if INCLUDE_AOT
   AOTLoader::oops_do(&rcl);
+  #endif // INCLUDE_AOT
   return rcl.complete();
 }
 

@@ -29,25 +29,19 @@
 #include "runtime/os.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_CMSGC
-#include "gc/cms/cmsArguments.hpp"
 #endif
 #if INCLUDE_EPSILONGC
-#include "gc/epsilon/epsilonArguments.hpp"
 #endif
 #if INCLUDE_G1GC
 #include "gc/g1/g1Arguments.hpp"
 #endif
 #if INCLUDE_PARALLELGC
-#include "gc/parallel/parallelArguments.hpp"
 #endif
 #if INCLUDE_SERIALGC
-#include "gc/serial/serialArguments.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoahArguments.hpp"
 #endif
 #if INCLUDE_ZGC
-#include "gc/z/zArguments.hpp"
 #endif
 
 struct SupportedGC {

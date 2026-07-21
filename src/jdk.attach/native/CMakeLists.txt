@@ -1,0 +1,5 @@
+file(GLOB SRC "../linux/native/libattach/*.c")
+add_library(attach SHARED ${SRC})
+target_include_directories(attach PRIVATE ../linux/native/libattach)
+target_link_libraries(attach PRIVATE java)
+set_target_properties(attach PROPERTIES OUTPUT_NAME attach)

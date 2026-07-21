@@ -81,17 +81,12 @@
 #include "gc/g1/heapRegionRemSet.hpp"
 #endif // INCLUDE_G1GC
 #if INCLUDE_PARALLELGC
-#include "gc/parallel/parallelScavengeHeap.inline.hpp"
-#include "gc/parallel/adjoiningGenerations.hpp"
 #endif // INCLUDE_PARALLELGC
 #if INCLUDE_NMT
 #include "services/mallocSiteTable.hpp"
 #include "services/memTracker.hpp"
 #include "utilities/nativeCallStack.hpp"
 #endif // INCLUDE_NMT
-#if INCLUDE_AOT
-#include "aot/aotLoader.hpp"
-#endif // INCLUDE_AOT
 
 #ifdef LINUX
 #include "os_linux.hpp"
@@ -2084,7 +2079,9 @@ WB_END
 WB_ENTRY(jint, WB_AotLibrariesCount(JNIEnv* env, jobject o))
   jint result = 0;
 #if INCLUDE_AOT
+  #if INCLUDE_AOT
   result = (jint) AOTLoader::heaps_count();
+  #endif // INCLUDE_AOT
 #endif
   return result;
 WB_END

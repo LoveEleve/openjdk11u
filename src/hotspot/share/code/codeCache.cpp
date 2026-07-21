@@ -23,7 +23,6 @@
  */
 
 #include "precompiled.hpp"
-#include "aot/aotLoader.hpp"
 #include "code/codeBlob.hpp"
 #include "code/codeCache.hpp"
 #include "code/codeHeapState.hpp"
@@ -682,7 +681,9 @@ void CodeCache::metadata_do(void f(Metadata* m)) {
   while(iter.next_alive()) {
     iter.method()->metadata_do(f);
   }
+  #if INCLUDE_AOT
   AOTLoader::metadata_do(f);
+  #endif // INCLUDE_AOT
 }
 
 int CodeCache::alignment_unit() {
@@ -1103,7 +1104,7 @@ void CodeCache::initialize() {
 
   // Initialize ICache flush mechanism
   // This service is needed for os::register_code_area
-  icache_init();
+    icache_init();
 
   // Give OS a chance to register generated code area.
   // This is used on Windows 64 bit platforms to register
@@ -1114,7 +1115,9 @@ void CodeCache::initialize() {
 void codeCache_init() {
   CodeCache::initialize();
   // Load AOT libraries and add AOT code heaps.
+  #if INCLUDE_AOT
   AOTLoader::initialize();
+  #endif // INCLUDE_AOT
 }
 
 //------------------------------------------------------------------------------------------------

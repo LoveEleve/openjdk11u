@@ -24,7 +24,6 @@
 
 #include "precompiled.hpp"
 #include "jvm.h"
-#include "aot/aotLoader.hpp"
 #include "classfile/classFileParser.hpp"
 #include "classfile/classFileStream.hpp"
 #include "classfile/classLoader.hpp"
@@ -984,7 +983,9 @@ void InstanceKlass::initialize_impl(TRAPS) {
 
 
   // Look for aot compiled methods for this klass, including class initializer.
+  #if INCLUDE_AOT
   AOTLoader::load_for_klass(this, THREAD);
+  #endif // INCLUDE_AOT
 
   // Step 8
   {

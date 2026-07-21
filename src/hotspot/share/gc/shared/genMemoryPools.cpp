@@ -27,7 +27,6 @@
 #include "gc/shared/genMemoryPools.hpp"
 #include "gc/shared/space.hpp"
 #if INCLUDE_SERIALGC
-#include "gc/serial/defNewGeneration.hpp"
 #endif
 
 ContiguousSpacePool::ContiguousSpacePool(ContiguousSpace* space,

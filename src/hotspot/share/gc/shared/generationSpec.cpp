@@ -30,12 +30,8 @@
 #include "runtime/java.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_CMSGC
-#include "gc/cms/concurrentMarkSweepGeneration.hpp"
-#include "gc/cms/parNewGeneration.hpp"
 #endif
 #if INCLUDE_SERIALGC
-#include "gc/serial/defNewGeneration.hpp"
-#include "gc/serial/tenuredGeneration.hpp"
 #endif
 
 Generation* GenerationSpec::init(ReservedSpace rs, CardTableRS* remset) {

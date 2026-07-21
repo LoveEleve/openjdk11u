@@ -32,7 +32,6 @@
 #include "runtime/perfData.hpp"
 #include "utilities/stack.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciCompiler.hpp"
 #endif
 
 class nmethod;

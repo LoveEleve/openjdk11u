@@ -1,0 +1,5 @@
+file(GLOB SRC "../unix/native/libjaas/*.c")
+add_library(jaas SHARED ${SRC})
+target_include_directories(jaas PRIVATE ../unix/native/libjaas)
+target_link_libraries(jaas PRIVATE java)
+set_target_properties(jaas PROPERTIES OUTPUT_NAME jaas)

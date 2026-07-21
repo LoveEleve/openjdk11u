@@ -33,7 +33,6 @@
 #include "code/scopeDesc.hpp"
 #include "oops/method.inline.hpp"
 #if INCLUDE_JVMCI
-#include "jvmci/jvmciRuntime.hpp"
 #endif
 
 #ifdef TIERED
