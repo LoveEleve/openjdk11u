@@ -37,6 +37,7 @@
 #include "oops/oop.hpp"
 #include "utilities/ticks.hpp"
 
+class G1OopStarChunkedList;
 class G1PLABAllocator;
 class G1EvacuationRootClosures;
 class HeapRegion;
@@ -88,8 +89,14 @@ class G1ParScanThreadState : public CHeapObj<mtGC> {
     return _dest[original.value()];
   }
 
+  size_t _num_optional_regions;
+  G1OopStarChunkedList* _oops_into_optional_regions;
+
 public:
-  G1ParScanThreadState(G1CollectedHeap* g1h, uint worker_id, size_t young_cset_length);
+  G1ParScanThreadState(G1CollectedHeap* g1h,
+                       uint worker_id,
+                       size_t young_cset_length,
+                       size_t optional_cset_length);
   virtual ~G1ParScanThreadState();
 
   void set_ref_discoverer(ReferenceDiscoverer* rd) { _scanner.set_ref_discoverer(rd); }
@@ -105,25 +112,17 @@ public:
   template <class T> void do_oop_ext(T* ref);
   template <class T> void push_on_queue(T* ref);
 
-  // Apply the post barrier to the given reference field. Enqueues the card of p
-  // if the barrier does not filter out the reference for some reason (e.g.
-  // p and q are in the same region, p is in survivor, p is in collection set)
-  // To be called during GC if nothing particular about p and obj are known.
-  template <class T> void write_ref_field_post(T* p, oop obj);
-
   template <class T> void update_rs(HeapRegion* from, T* p, oop o) {
     assert(!HeapRegion::is_in_same_region(p, o), "Caller should have filtered out cross-region references already.");
-    // If the field originates from the to-space, we don't need to include it
-    // in the remembered set updates. Also, if we are not tracking the remembered
-    // set in the destination region, do not bother either.
     if (!from->is_young() && _g1h->heap_region_containing((HeapWord*)o)->rem_set()->is_tracked()) {
       size_t card_index = ct()->index_for(p);
-      // If the card hasn't been added to the buffer, do it.
       if (ct()->mark_card_deferred(card_index)) {
         dirty_card_queue().enqueue((jbyte*)ct()->byte_for_index(card_index));
       }
     }
   }
+
+  template <class T> void write_ref_field_post(T* p, oop obj);
 
   G1EvacuationRootClosures* closures() { return _closures; }
   uint worker_id() { return _worker_id; }
@@ -214,6 +213,13 @@ public:
 
   // An attempt to evacuate "obj" has failed; take necessary steps.
   oop handle_evacuation_failure_par(oop obj, markOop m);
+
+  template <typename T>
+  inline void remember_root_into_optional_region(T* p);
+  template <typename T>
+  inline void remember_reference_into_optional_region(T* p);
+
+  inline G1OopStarChunkedList* oops_into_optional_region(const HeapRegion* hr);
 };
 
 class G1ParScanThreadStateSet : public StackObj {
@@ -221,14 +227,19 @@ class G1ParScanThreadStateSet : public StackObj {
   G1ParScanThreadState** _states;
   size_t* _surviving_young_words_total;
   size_t _young_cset_length;
+  size_t _optional_cset_length;
   uint _n_workers;
   bool _flushed;
 
  public:
-  G1ParScanThreadStateSet(G1CollectedHeap* g1h, uint n_workers, size_t young_cset_length);
+  G1ParScanThreadStateSet(G1CollectedHeap* g1h,
+                          uint n_workers,
+                          size_t young_cset_length,
+                          size_t optional_cset_length);
   ~G1ParScanThreadStateSet();
 
   void flush();
+  void record_unused_optional_region(HeapRegion* hr);
 
   G1ParScanThreadState* state_for_worker(uint worker_id);
 

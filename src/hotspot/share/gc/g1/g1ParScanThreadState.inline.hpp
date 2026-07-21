@@ -26,6 +26,7 @@
 #define SHARE_VM_GC_G1_G1PARSCANTHREADSTATE_INLINE_HPP
 
 #include "gc/g1/g1ParScanThreadState.hpp"
+#include "gc/g1/g1OopStarChunkedList.inline.hpp"
 #include "gc/g1/g1RemSet.hpp"
 #include "oops/access.inline.hpp"
 #include "oops/oop.inline.hpp"
@@ -55,16 +56,11 @@ template <class T> void G1ParScanThreadState::do_oop_evac(T* p) {
            "In_cset_state must be NotInCSet here, but is " CSETSTATE_FORMAT, in_cset_state.value());
   }
 
-  write_ref_field_post(p, obj);
-}
-
-template <class T> void G1ParScanThreadState::write_ref_field_post(T* p, oop obj) {
   assert(obj != NULL, "Must be");
-  if (HeapRegion::is_in_same_region(p, obj)) {
-    return;
+  if (!HeapRegion::is_in_same_region(p, obj)) {
+    HeapRegion* from = _g1h->heap_region_containing(p);
+    update_rs(from, p, obj);
   }
-  HeapRegion* from = _g1h->heap_region_containing(p);
-  update_rs(from, p, obj);
 }
 
 template <class T> inline void G1ParScanThreadState::push_on_queue(T* ref) {
@@ -196,6 +192,34 @@ inline Tickspan G1ParScanThreadState::trim_ticks() const {
 
 inline void G1ParScanThreadState::reset_trim_ticks() {
   _trim_ticks = Tickspan();
+}
+
+template <class T> void G1ParScanThreadState::write_ref_field_post(T* p, oop obj) {
+  assert(obj != NULL, "Must be");
+  if (HeapRegion::is_in_same_region(p, obj)) {
+    return;
+  }
+  HeapRegion* from = _g1h->heap_region_containing(p);
+  update_rs(from, p, obj);
+}
+
+template <typename T>
+inline void G1ParScanThreadState::remember_root_into_optional_region(T* p) {
+  oop o = RawAccess<IS_NOT_NULL>::oop_load(p);
+  uint index = _g1h->heap_region_containing(o)->index_in_opt_cset();
+  _oops_into_optional_regions[index].push_root(p);
+}
+
+template <typename T>
+inline void G1ParScanThreadState::remember_reference_into_optional_region(T* p) {
+  oop o = RawAccess<IS_NOT_NULL>::oop_load(p);
+  uint index = _g1h->heap_region_containing(o)->index_in_opt_cset();
+  _oops_into_optional_regions[index].push_oop(p);
+  DEBUG_ONLY(verify_ref(p);)
+}
+
+G1OopStarChunkedList* G1ParScanThreadState::oops_into_optional_region(const HeapRegion* hr) {
+  return &_oops_into_optional_regions[hr->index_in_opt_cset()];
 }
 
 #endif // SHARE_VM_GC_G1_G1PARSCANTHREADSTATE_INLINE_HPP

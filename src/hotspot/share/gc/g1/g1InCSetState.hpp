@@ -125,7 +125,7 @@ class G1InCSetStateFastTestBiasedMappedArray : public G1BiasedMappedArray<InCSet
     set_by_index(index, InCSetState::Old);
   }
 
-  void set_in_optional(uintptr_t index) {
+  void set_optional(uintptr_t index) {
     assert(get_by_index(index).is_default(),
            "State at index " INTPTR_FORMAT " should be default but is " CSETSTATE_FORMAT, index, get_by_index(index).value());
     set_by_index(index, InCSetState::Optional);
