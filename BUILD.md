@@ -216,6 +216,39 @@ sudo sh -c 'echo 0 > /proc/sys/kernel/yama/ptrace_scope'
 
 重新 `cmake ..`，因为 cmake 在 configure 时做了一次 glob，之后加的文件不自动发现。
 
+### 修改 Java 标准库后 `-version` 崩溃（SIGSEGV）
+
+**症状**：`openjdk version` 输出 GC 日志后立即 SIGSEGV。
+
+**原因**：`build/` 目录被所有 git 分支共享。如果在分支 A 上修改了 Java 源码并
+执行了 `make java.base-java`（重编了 3000+ 个 .class 文件），切换回分支 B 时：
+- C++ 侧（libjvm.so）是分支 B 的版本
+- Java 侧（.class 文件）却是分支 A 的版本
+- native 方法注册时签名不匹配 → 崩溃
+
+**修复**：切换分支后同时重建 Java 类和 native 代码：
+```bash
+make java.base-java       # 重编 Java 类，匹配当前分支源码
+cd cmake-build-debug && cmake --build . --target jvm -j$(nproc)  # 重编 native
+```
+
+### 破坏性操作注意
+
+`rm -rf build/` 会删除 `configure` 的所有产物（JNI headers、java 启动器等）。
+需要从头重建（代价高，约 5-10 分钟）：
+
+```bash
+bash configure --with-jvm-variants=server --with-debug-level=slowdebug \
+    --with-boot-jdk=/path/to/jdk11 --with-native-debug-symbols=none \
+    --disable-precompiled-headers --disable-javac-server --with-memory-size=32768
+make java.base           # 注意：是 java.base，不是 java.base-java
+bash cmake/spec2cmake.sh build/.../spec.gmk build/.../cmake_config.cmake
+mkdir cmake-build-debug && cd cmake-build-debug && cmake .. && cmake --build . -j$(nproc)
+```
+
+**注意**：`make java.base` 与 `make java.base-java` 不同——后者只编译 Java 类，
+前者还生成 JNI 头文件（`support/modules_include/`），缺少会报 `fatal error: jni.h`。
+
 ---
 
 ## 构建原理
