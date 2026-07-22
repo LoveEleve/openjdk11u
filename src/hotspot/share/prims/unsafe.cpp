@@ -298,6 +298,11 @@ UNSAFE_LEAF(jboolean, Unsafe_isBigEndian0(JNIEnv *env, jobject unsafe)) {
 #endif
 } UNSAFE_END
 
+UNSAFE_ENTRY(void, Unsafe_ReportJavaOutOfMemory0(JNIEnv *env, jobject unsafe, jstring message)) {
+  char *utf_message = java_lang_String::as_utf8_string(JNIHandles::resolve_non_null(message));
+  report_java_out_of_memory(utf_message);
+} UNSAFE_END
+
 UNSAFE_LEAF(jint, Unsafe_unalignedAccess0(JNIEnv *env, jobject unsafe)) {
   return UseUnalignedAccesses;
 } UNSAFE_END
@@ -1091,7 +1096,8 @@ static JNINativeMethod jdk_internal_misc_Unsafe_methods[] = {
     {CC "fullFence",          CC "()V",                  FN_PTR(Unsafe_FullFence)},
 
     {CC "isBigEndian0",       CC "()Z",                  FN_PTR(Unsafe_isBigEndian0)},
-    {CC "unalignedAccess0",   CC "()Z",                  FN_PTR(Unsafe_unalignedAccess0)}
+    {CC "unalignedAccess0",   CC "()Z",                  FN_PTR(Unsafe_unalignedAccess0)},
+    {CC "reportJavaOutOfMemory0", CC "(" LANG "String;)V", FN_PTR(Unsafe_ReportJavaOutOfMemory0)},
 };
 
 #undef CC

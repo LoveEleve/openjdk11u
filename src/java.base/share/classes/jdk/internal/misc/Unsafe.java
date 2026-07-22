@@ -3315,6 +3315,14 @@ public final class Unsafe {
     public native void fullFence();
 
     /**
+     * Report an OutOfMemoryError to the JVM so that JVM-level OOM
+     * flags (ExitOnOutOfMemoryError, CrashOnOutOfMemoryError,
+     * HeapDumpOnOutOfMemoryError) can take effect for direct
+     * memory allocation failures.
+     */
+    public native void reportJavaOutOfMemory0(String message);
+
+    /**
      * Ensures that loads before the fence will not be reordered with
      * loads after the fence.
      */
@@ -3724,4 +3732,12 @@ public final class Unsafe {
     private native int getLoadAverage0(double[] loadavg, int nelems);
     private native boolean unalignedAccess0();
     private native boolean isBigEndian0();
+
+    /**
+     * Report an OutOfMemoryError message to the JVM.
+     * This triggers JVM-level OOM actions such as
+     * ExitOnOutOfMemoryError, CrashOnOutOfMemoryError,
+     * or HeapDumpOnOutOfMemoryError, depending on flags.
+     */
+    public native void reportJavaOutOfMemory0(String message);
 }

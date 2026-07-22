@@ -171,8 +171,15 @@ class Bits {                            // package-private
                 }
             }
 
+            OutOfMemoryError error = new OutOfMemoryError(
+                "Cannot reserve " + size
+                + " bytes of direct buffer memory (allocated: "
+                + RESERVED_MEMORY.get() + ", limit: " + MAX_MEMORY + ")");
+            if (Boolean.getBoolean("jdk.nio.reportOomOnDirectMemoryOom")) {
+                UNSAFE.reportJavaOutOfMemory0(error.getMessage());
+            }
             // no luck
-            throw new OutOfMemoryError("Direct buffer memory");
+            throw error;
 
         } finally {
             if (interrupted) {
