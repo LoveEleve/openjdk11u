@@ -56,9 +56,15 @@ final class UnsafeInstrumentor {
 ## 使用方式
 
 ```bash
-# 启动 JFR 录制（包含 native 分配事件）
 java -XX:StartFlightRecording=filename=rec.jfr MyApp
+jfr print --events JavaNativeAllocation,JavaNativeFree rec.jfr
+```
 
-# 分析
+## 已知限制
+
+当前裁剪构建缺少 `lib/modules` jimage 文件，JFR 录制文件无法通过
+`dumponexit` 或 `jcmd` 正常导出。`FlightRecorder.isAvailable()` 返回 true，
+事件 instrumentation 正常生效，但录制文件的持久化需要完整的 `lib/modules`。
+在标准 JDK 11 构建上此功能可完整工作。
 jfr print --events JavaNativeAllocation,JavaNativeFree rec.jfr
 ```
