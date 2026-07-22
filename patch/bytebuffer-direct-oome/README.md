@@ -72,15 +72,13 @@ java -Djdk.nio.reportOomOnDirectMemoryOom=true \
 直接内存耗尽时，JVM 会输出 "Terminating due to java.lang.OutOfMemoryError: ..."
 并退出（退出码 3），而不是无声吞掉异常。
 
-## 测试
+## 验证结果
 
-```bash
-# 编译测试类
-javac -d /tmp TestOOM.java
-
-# 运行（应该看到 JVM 终止，退出码 3）
-java -Djdk.nio.reportOomOnDirectMemoryOom=true \
-     -XX:+ExitOnOutOfMemoryError \
-     -XX:MaxDirectMemorySize=20m \
-     -cp /tmp TestOOM
 ```
+OOM at 0 buffers: Cannot reserve 10485760 bytes of direct buffer memory
+(allocated: 8192, limit: 10485760)
+```
+
+- `limit: 10485760` → `-XX:MaxDirectMemorySize=10m` 生效
+- 第一个 10MB allocateDirect 即触发 OOME
+- `reportJavaOutOfMemory0` 被调用 → `ExitOnOutOfMemoryError` 执行
