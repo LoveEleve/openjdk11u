@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2001, 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -101,7 +101,7 @@ public:
 //   ShenandoahHeap
 //   ZCollectedHeap
 //
-class CollectedHeap : public CHeapObj<mtGC> {
+class CollectedHeap : public CHeapObj<mtInternal> {
   friend class VMStructs;
   friend class JVMCIVMStructs;
   friend class IsGCActiveMark; // Block structured external access to _is_gc_active
@@ -527,6 +527,9 @@ class CollectedHeap : public CHeapObj<mtGC> {
   }
   // Iterator for all GC threads (other than VM thread)
   virtual void gc_threads_do(ThreadClosure* tc) const = 0;
+
+  // Run given task. Possibly in parallel if the GC supports it.
+  virtual void run_task(AbstractGangTask* task) = 0;
 
   // Print any relevant tracing info that flags imply.
   // Default implementation does nothing.

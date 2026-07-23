@@ -1114,6 +1114,9 @@ public:
     return _card_table;
   }
 
+  // Runs the given AbstractGangTask with the current active workers.
+  virtual void run_task(AbstractGangTask* task);
+
   // Iteration functions.
 
   void object_iterate_parallel(ObjectClosure* cl, uint worker_id, HeapRegionClaimer* claimer);
