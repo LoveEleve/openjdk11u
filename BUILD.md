@@ -46,13 +46,22 @@ bash configure \
     --disable-javac-server \
     --with-memory-size=32768
 
-# 3. 编译 Java 基础类 + 生成 JNI headers
-make java.base-java
+# 3. 编译 Java 基础类 + 生成 JNI headers + java 启动器
+#    注意：是 java.base，不是 java.base-java（后者不生成启动器）
+make java.base
 
-# 4. 从 spec.gmk 提取编译参数，生成 cmake 配置
+# 4. 编译其他需要的模块
+make jdk.jfr jdk.jcmd jdk.attach
+
+# 5. 从 spec.gmk 提取编译参数，生成 cmake 配置
 bash cmake/spec2cmake.sh \
     build/linux-x86_64-normal-server-slowdebug/spec.gmk \
     build/linux-x86_64-normal-server-slowdebug/cmake_config.cmake
+
+# 6. cmake 构建 C++ 代码（libjvm.so + native libraries）
+mkdir cmake-build-debug && cd cmake-build-debug
+cmake ..
+cmake --build . -j$(nproc)
 ```
 
 ---
@@ -263,7 +272,38 @@ mkdir cmake-build-debug && cd cmake-build-debug && cmake .. && cmake --build . -
 
 ```
 configure → spec.gmk (Makefile 参数)
-  ├→ make java.base-java (生成 JNI headers + Java 类)
+  ├→ make java.base (生成 JNI headers + java 启动器)
   └→ spec2cmake.sh → cmake_config.cmake
                         └→ CMakeLists.txt → file(GLOB) → cmake --build → libjvm.so
+
+**警告**：`make hotspot` 和 cmake 互不兼容，两者都产出 `libjvm.so` 到同一位置但
+编译参数完全不同。C++ 编译只用 cmake，Java 编译和启动器生成只用 make。
+
+### JFR 事件 metadata 更新
+
+如果要新增 JFR 事件：
+
+1. 编辑 `src/hotspot/share/jfr/metadata/metadata.xml`（源文件，不是 build 下的副本）
+2. 用系统 java 重新生成��文件：
+```bash
+/opt/codev/TencentKona/bin/java -cp \
+  build/linux-x86_64-normal-server-slowdebug/hotspot/variant-server/buildtools/tools_classes \
+  build.tools.jfr.GenerateJfrFiles \
+  src/hotspot/share/jfr/metadata/metadata.xml \
+  src/hotspot/share/jfr/metadata/metadata.xsd \
+  build/linux-x86_64-normal-server-slowdebug/hotspot/variant-server/gensrc/jfrfiles
 ```
+3. cmake 重建 libjvm.so：`cd cmake-build-debug && cmake --build . --target jvm -j$(nproc)`
+4. 更新 JFR 运行时的 metadata 副本：`cp src/.../metadata.xml build/.../jdk/modules/jdk.jfr/.../types/`
+5. 验证：用 jcmd 启动录制，程序调用 Unsafe.allocateMemory/freeMemory 后 dump 检查：
+
+```bash
+java &
+PID=$!; sleep 3
+jcmd $PID JFR.start name=test
+# ... 程序运行 Unsafe alloc/free ...
+jcmd $PID JFR.stop name=test filename=/tmp/result.jfr
+jfr summary /tmp/result.jfr          # 应看到 jdk.JavaNativeAllocation/Free
+```
+
+**已验证结果**：`feat/jfr-unsafe-events` 分支，3000 个 JavaNativeAllocation + 3000 个 JavaNativeFree 事件成功录制到 377KB 的 .jfr 文件中。
