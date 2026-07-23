@@ -1165,4 +1165,16 @@
   <XmlContentType name="bytes-per-second" annotation="jdk.jfr.DataAmount(BYTES), jdk.jfr.Frequency" />
   <XmlContentType name="bits-per-second" annotation="jdk.jfr.DataAmount(BITS), jdk.jfr.Frequency" />
  
+  <Event name="JavaNativeAllocation" label="Java Native Allocation" description="Allocation memory when using native" category="Java Application" thread="true" stackTrace="true">
+    <Field type="long" name="addr" label="Address" />
+    <Field type="long" name="allocationSize" label="Allocation Size" contentType="bytes" />
+  </Event>
+  <Event name="JavaNativeFree" label="Java Native Free" description="Free memory when using native" category="Java Application" thread="true" stackTrace="false">
+    <Field type="long" name="addr" label="Address" />
+  </Event>
+  <Event name="JavaNativeReallocate" label="Java Native Reallocate" description="Reallocate memory when using native" category="Java Application" thread="true" stackTrace="true">
+    <Field type="long" name="freeAddr" label="Freed Address" />
+    <Field type="long" name="allocAddr" label="Alloc Address" />
+    <Field type="long" name="allocationSize" label="Allocation Size" contentType="bytes" />
+  </Event>
 </Metadata>

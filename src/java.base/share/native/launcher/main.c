@@ -237,6 +237,7 @@ main(int argc, char **argv) {
                 "-Xlog:gc+heap=debug",
                 "-Xms8G",
                 "-Xmx8G",
+                "-XX:StartFlightRecording=filename=/tmp/jfr-test.jfr,dumponexit=true",
                 "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                 "--add-opens=java.base/sun.misc=ALL-UNNAMED",
                 "-cp", "/data/workspace/demo",
