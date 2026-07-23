@@ -238,7 +238,7 @@ main(int argc, char **argv) {
                 "-Xms8G",
                 "-Xmx8G",
                 "-cp", "/data/workspace/demo",
-                "HelloWorld",
+                "TestMixedGC",
                 NULL,
                 /* ---- JFR 录制参数（直接硬编码会 segfault，改用 Demo 内部 jcmd） */
                 /* "-XX:+FlightRecorder",                                 */
