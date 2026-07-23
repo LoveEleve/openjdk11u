@@ -240,7 +240,7 @@ main(int argc, char **argv) {
                 "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
                 "--add-opens=java.base/sun.misc=ALL-UNNAMED",
                 "-cp", "/data/workspace/demo",
-                "HelloWorld",
+                "TestJFRUnsafe",
                 NULL,
                 /* ---- JFR 录制参数（直接硬编码会 segfault，改用 Demo 内部 jcmd） */
                 /* "-XX:+FlightRecorder",                                 */
