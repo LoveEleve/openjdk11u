@@ -225,24 +225,13 @@ main(int argc, char **argv) {
     /* ===== BEGIN 调试用硬编码参数（仅 java 启动器生效） ===== */
     if (const_progname != NULL && JLI_StrCmp(const_progname, "java") == 0) {
         static char *hardcoded_argv[] = {
-//                "java",
-//                "-Dfile.encoding=UTF-8",
-//                "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
-//                "-cp", "/data/workspace/my-openjdk/tmp-java/out",
-//                "JfrDemo",
-//                NULL,
-                /* ---- 以下为之前的参数，保留备用 ---- */
                 "java",
-//                 "-Xlog:startuptime=info",
-                "-Xlog:gc+heap=debug",
-                "-Xms8G",
-                "-Xmx8G",
+                "-Xms512M",
+                "-Xmx512M",
+                "-XX:NativeMemoryTracking=detail",
                 "-cp", "/data/workspace/demo",
                 "HelloWorld",
                 NULL,
-                /* ---- JFR 录制参数（直接硬编码会 segfault，改用 Demo 内部 jcmd） */
-                /* "-XX:+FlightRecorder",                                 */
-                /* "-XX:StartFlightRecording=...",                       */
         };
         margc = (int) (sizeof(hardcoded_argv) / sizeof(hardcoded_argv[0])) - 1;
         margv = hardcoded_argv;
