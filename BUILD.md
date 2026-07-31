@@ -97,6 +97,14 @@ CLion 会提示 "CMake project is not loaded"，点 **Load CMake Project**。
 
 **注意**：CLion 的 cmake 构建只会产出 `libjvm.so`。Java 类库和 `java` 启动器是通过第 2~3 步（configure + make）生成的，不需要每次都重编。
 
+**绿色箭头的坑（重要）**：CLion 右上角 Run Configuration 直接跑 `java` 时，只会增量编译该目标
+的依赖链，而 `launcher/CMakeLists.txt` 里 `java` 启动器只链接 `jli pthread dl`，**不依赖 `jvm`
+目标**。改 JVM C++ 代码后直接点绿色箭头**不会重编 libjvm.so**（它是运行时 dlopen 加载的，
+不在链接依赖里），跑的还是旧 .so。
+
+正确姿势：**先 `Ctrl+F9`（Build Project，编译所有目标含 jvm），再点绿色箭头跑 `java`**。
+libjvm.so 直接输出到 `build/.../jdk/lib/server/`（运行加载位置），无需手动 copy。
+
 ### main.c 硬编码参数（开发效率 hack）
 
 `src/java.base/share/native/launcher/main.c` 硬编码了默认 JVM 参数，目的：**不用每次在 CLion 右上角 Configuration 里手动填参数**。
