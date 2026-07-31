@@ -108,6 +108,7 @@ add_library(jvm SHARED
 
 # Hotspot-specific compile flags (matching Make spec.gmk exactly)
 target_compile_options(jvm PRIVATE
+    -g   # debug info (line numbers/types) for gdb/CLion breakpoints
     -std=gnu++98 -fno-rtti -fno-exceptions
     -fno-strict-aliasing -fno-omit-frame-pointer
     -fvisibility=hidden -fcheck-new -fstack-protector
